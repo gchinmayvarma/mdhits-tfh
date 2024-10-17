@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>MDHITS-tfh</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.10.0/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.10.0/addons/p5.sound.min.js"></script>
+    <style>
+            html, body {
+              margin: 0;
+              padding: 0;
+              background-color: #121212;
+              color: #e0e0e0;
+              font-family: Arial, sans-serif;
+            }
+            canvas {
+              position: absolute; /* Make the canvas absolute */
+              left: 50%;         /* Start from 50% width */
+              top:0%;
+            }
+            .button {
+              margin: 10px;
+              padding: 12px 24px;
+              background-color: #333;
+              color: #e0e0e0;
+              border: 1px solid #555;
+              cursor: pointer;
+              font-size: 16px;
+              border-radius: 5px;
+              transition: background-color 0.3s, color 0.3s;
+            }
+            .button:hover {
+              background-color: #444;
+              color: #fff;
+            }
+            .content {
+              padding: 20px;
+              text-align: left;
+            }
+            h1 {
+              font-size: 24px;
+              color: #e0e0e0;
+            }
+
+            h2 {
+              font-size: 20px;
+              color: #b0b0b0;
+            }
+
+            p {
+              font-size: 16px;
+              color: #b0b0b0;
+              width:600px;
+              text-align: left;      /* Left align the text */
+      /*         text-justify: inter-word;  */
+            }
+    </style>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <main class="content">
+      <h1>MDHITS-tfh</h1>
+      <h2>
+        Integrative analysis of human Tfh cell differentiation using a
+        multilayered gene regulatory network approach
+      </h2>
+      <p>
+        Abstract: Analysis of gene regulatory networks (GRNs) across cell
+        differentiation can offer novel insights into the regulators of lineage
+        specification and immune cell development. Many variations of ranking
+        algorithms like Personalized PageRank and Hyperlink-Induced Topic Search
+        (HITS) that rank node centrality measures have been applied to identify
+        pivotal genes and transcription factors (TFs) in GRNs. However, these
+        algorithms have limitations in modeling global regulatory dynamics
+        across a differentiation trajectory and do not capture information about
+        gene expression dynamics that arise in response to changes in TF
+        activity across differentiation. To address these challenges, we propose
+        using a multilayered network framework for analyzing GRNs across a
+        trajectory of cell differentiation that can be analyzed using the
+        Multi-Dimensional HITS (MD-HITS) algorithm, a globally convergent
+        nonlinear extension of the original HITS algorithm. We utilized this
+        analytical framework on a dataset of chromatin accessibility and gene
+        expression levels across human T follicular helper (Tfh) cell
+        development, revealing critical hub and authority nodes governing human
+        Tfh cell differentiation. This approach is amenable to incorporating
+        additional priors such as mRNA expression and protein-protein
+        interaction networks. These findings underscore the value of a
+        multilayered approach in the identification of hubs and authorities for
+        elucidating complex regulatory networks underlying cell differentiation.
+      </p>
+
+      <button
+        class="button"
+        onclick="window.location.href='https://example.com/paper'"
+      >
+        Link to Tool
+      </button>
+      <button
+        class="button"
+        onclick="window.location.href='https://example.com/tool'"
+      >
+        Link to Paper
+      </button>
+      <button
+        class="button"
+        onclick="window.location.href='https://example.com/tool'"
+      >
+        Code
+      </button>
+    </main>
+    <script>
+      let node_particles = [];
+
+      function setup() {
+        createCanvas(windowWidth / 2, windowHeight);
+        pixelDensity(1);
+        for (let i = 0; i < 10; ++i) {
+          // node_particles.push(new node_particle());
+        }
+      }
+
+      function draw() {
+        clear();
+        if (random(100) < 20 && node_particles.length < 200) {
+          node_particles.push(new node_particle());
+        }
+
+        for (let i = node_particles.length - 1; i > -1; --i) {
+          node_particles[i].work();
+          if (node_particles[i].a <= 0) {
+            node_particles.splice(i, 1);
+          }
+        }
+      }
+
+      class node_particle {
+        constructor() {
+          this.r = random(5, 15);
+          this.x = random(this.r*2, width);
+          this.y = random(height, height + this.r / 2);
+          this.dx = random(2);
+          this.dy = -random(6);
+          this.connections = [];
+          this.a = 1;
+          this.a_max = random(255);
+          this.da = random(3, 4);
+          for (let i = node_particles.length - 1; i > -1; --i) {
+            if (random(100) < this.r * 2) {
+              this.connections.push(i);
+            }
+          }
+        }
+        work() {
+          this.x += this.dx;
+          this.y += this.dy;
+          this.a += this.da;
+          if (this.a > this.a_max) this.da *= -1;
+          if (this.y < 0) this.a -= 1;
+
+          for (let i = this.connections.length - 1; i > -1; --i) {
+            if (this.connections[i] < node_particles.length - 1) {
+              stroke(200, 100);
+              gradientLine(
+                this.x,
+                this.y,
+                node_particles[this.connections[i]].x,
+                node_particles[this.connections[i]].y,
+                color(100, this.a / 2),
+                color(100, node_particles[this.connections[i]].a / 2)
+              );
+            }
+          }
+
+          stroke(20, this.a);
+          fill(220, this.a);
+          circle(this.x, this.y, this.r);
+        }
+      }
+
+      function gradientLine(x1, y1, x2, y2, color1, color2) {
+        var grad = this.drawingContext.createLinearGradient(x1, y1, x2, y2);
+        grad.addColorStop(0, color1);
+        grad.addColorStop(1, color2);
+        this.drawingContext.strokeStyle = grad;
+        line(x1, y1, x2, y2);
+      }
+    </script>
+  </body>
+</html>
