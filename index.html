@@ -120,7 +120,7 @@
 
       function draw() {
         clear();
-        if (random(100) < 40 && node_particles.length < 250) {
+        if (random(100) < 30 && node_particles.length < 200) {
           node_particles.push(new node_particle());
         }
 
@@ -135,7 +135,7 @@
       class node_particle {
         constructor() {
           this.r = random(5, 15);
-          this.x = random(this.r*2, width);
+          this.x = random(this.r*2, width*1.2);
           this.y = random(height, height + this.r / 2);
           this.dx = random(2);
           this.dy = -random(6);
