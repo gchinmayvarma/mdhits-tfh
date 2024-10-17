@@ -14,7 +14,7 @@
             }
             canvas {
               position: absolute; /* Make the canvas absolute */
-              left: 50%;         /* Start from 50% width */
+              left: 35%;         /* Start from 50% width */
               top:0%;
             }
             .button {
@@ -111,7 +111,7 @@
       let node_particles = [];
 
       function setup() {
-        createCanvas(windowWidth / 2, windowHeight);
+        createCanvas(windowWidth * 0.65 , windowHeight);
         pixelDensity(1);
         for (let i = 0; i < 10; ++i) {
           // node_particles.push(new node_particle());
@@ -135,7 +135,7 @@
       class node_particle {
         constructor() {
           this.r = random(5, 15);
-          this.x = random(this.r*2, width*1.2);
+          this.x = random(this.r*2, width*1.08);
           this.y = random(height, height + this.r / 2);
           this.dx = random(2);
           this.dy = -random(6);
