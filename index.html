@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <title>MDHITS-tfh</title>
+    <link rel="icon" href="https://github.com/gchinmayvarma/wallpaper_nexttech/blob/master/stuff/offline.png" type="image/x-icon">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.10.0/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.10.0/addons/p5.sound.min.js"></script>
     <style>
@@ -14,7 +15,7 @@
             }
             canvas {
               position: absolute; /* Make the canvas absolute */
-              left: 35%;         /* Start from 50% width */
+              left: 50%;         /* Start from 50% width */
               top:0%;
             }
             .button {
@@ -112,7 +113,7 @@
       let node_id_max = 0;
       let wind = 0;
       function setup() {
-        createCanvas(windowWidth / 2, windowHeight);
+        createCanvas(windowWidth *0.5, windowHeight);
         pixelDensity(1);
         for (let i = 0; i < 10; ++i) {
           // node_particles.push(new node_particle());
