@@ -109,24 +109,35 @@
     </main>
     <script>
       let node_particles = [];
-
+      let node_id_max = 0;
+      let wind = 0;
       function setup() {
-        createCanvas(windowWidth * 0.65 , windowHeight);
+        createCanvas(windowWidth / 2, windowHeight);
         pixelDensity(1);
         for (let i = 0; i < 10; ++i) {
           // node_particles.push(new node_particle());
+          // node_particles[i].x = random(width);
+          // node_particles[i].y = random(height);
+          
         }
       }
 
       function draw() {
         clear();
-        if (random(100) < 30 && node_particles.length < 200) {
+        if (random(100) < 40 && node_particles.length < 300) {
           node_particles.push(new node_particle());
         }
 
         for (let i = node_particles.length - 1; i > -1; --i) {
           node_particles[i].work();
           if (node_particles[i].a <= 0) {
+
+            for (let j = node_particles.length - 1; j > -1; --j) {
+              // if(node_particles[j].connections.includes(node_particles[i].id)){
+              //     node_particles[j].connections.splice( node_particles[j].connections.indexOf(node_particles[i].id), 1);
+              // }
+              // node_particles[j].reset_connections();
+            }
             node_particles.splice(i, 1);
           }
         }
@@ -134,40 +145,62 @@
 
       class node_particle {
         constructor() {
+          node_id_max += 1;
+          this.id = node_id_max;
           this.r = random(5, 15);
-          this.x = random(this.r*2, width*1.08);
-          this.y = random(height, height + this.r / 2);
+          this.x = randomGaussian(width*0.6, width/5);
+          if(this.x<0) this.x = 0;
+          this.y = height
+          if(random(100)<20){
+            this.y = random(height*0.3,height) ; //random(height, height + this.r / 2);
+          }
           this.dx = random(2);
           this.dy = -random(6);
           this.connections = [];
           this.a = 1;
           this.a_max = random(255);
-          this.da = random(3, 4);
+          this.da = random(1,2)
+          this.dda = random(1,2);
           for (let i = node_particles.length - 1; i > -1; --i) {
             if (random(100) < this.r * 2) {
-              this.connections.push(i);
+              // if(node_particles[i].da < 0 ) continue;
+              this.connections.push(node_particles[i].id);
             }
           }
         }
+        reset_connections(){
+          this.connections = [];
+        }
         work() {
+          // this.da = constrain(this.da, -10,10);
           this.x += this.dx;
           this.y += this.dy;
+          this.da += this.dda;
           this.a += this.da;
-          if (this.a > this.a_max) this.da *= -1;
+          if (this.a > this.a_max){
+            this.da = -random(1,3);
+            this.dda = 0;
+          }
           if (this.y < 0) this.a -= 1;
 
           for (let i = this.connections.length - 1; i > -1; --i) {
-            if (this.connections[i] < node_particles.length - 1) {
+            // if( this.connections[i] === 0 ) continue;
+            // if (this.connections[i] < node_particles.length - 1) {
+
+            for (let j = node_particles.length - 1; j > -1; --j) {
+              if(node_particles[j].id === this.connections[i]){
               stroke(200, 100);
               gradientLine(
                 this.x,
                 this.y,
-                node_particles[this.connections[i]].x,
-                node_particles[this.connections[i]].y,
-                color(100, this.a / 2),
-                color(100, node_particles[this.connections[i]].a / 2)
+                node_particles[j].x,
+                node_particles[j].y,
+                color(100, min(this.a, node_particles[j].a) ),
+                color(100, min(this.a, node_particles[j].a) )
               );
+              break;}
             }
+            // }
           }
 
           stroke(20, this.a);
